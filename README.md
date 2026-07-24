@@ -77,6 +77,27 @@ whole feature set, none of its setup.
 builds it on all three OSes and smoke-runs the frozen binary headless
 (`SDL_VIDEODRIVER=dummy GAMESHIP_MAX_FRAMES=120`).
 
+## Common questions this answers
+
+**How do I turn my pygame game into an .exe?** `gameship build` on a Windows
+machine (or let the generated workflow's Windows runner do it) — PyInstaller
+under the hood, no spec file to write.
+
+**How do I make a Mac .app from a pygame game?** Same command on macOS:
+`gameship build` → `dist/mac/YourGame.app`.
+
+**How do I upload a pygame game to itch.io automatically?** `gameship push
+you/your-game` locally, or add the `BUTLER_API_KEY` secret so every tagged
+release publishes to your itch channels from CI.
+
+**How do I build my game for Windows, Mac, and Linux at once?** You can't
+cross-compile Python — nobody can — so `gameship ci` writes the GitHub
+Actions matrix that builds natively on all three, free on public repos.
+
+**Can my pygame game run in the browser?** If it's pygame-ce with an async
+main loop: `gameship web` (pygbag), then upload the build as an itch.io HTML5
+game.
+
 ## License
 
 MIT. Assets: none — the example uses shapes.
