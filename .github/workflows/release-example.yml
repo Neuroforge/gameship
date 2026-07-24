@@ -44,3 +44,24 @@ jobs:
           KEY: ${{ secrets.BUTLER_API_KEY }}
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: gameship push "${{ vars.ITCH_TARGET }}" --channel "${{ matrix.channel }}"
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install gameship pygbag pygame-ce
+      - name: browser build with gameship
+        run: gameship web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: catcher-web
+          path: example/build/web/
+      - name: publish html5 channel to itch.io
+        if: ${{ env.KEY != '' && vars.ITCH_TARGET != '' }}
+        shell: bash
+        env:
+          KEY: ${{ secrets.BUTLER_API_KEY }}
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: gameship push "${{ vars.ITCH_TARGET }}" build/web --channel html5
