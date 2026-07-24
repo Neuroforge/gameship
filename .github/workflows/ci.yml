@@ -1,0 +1,40 @@
+# Self-test: build the example game on all three OSes and smoke-run the
+# frozen binary headless. This is the same pipeline `gameship ci` gives users.
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-example:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,  channel: linux }
+          - { os: windows-latest, channel: windows }
+          - { os: macos-latest,   channel: mac }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e . pyinstaller pygame-ce
+      - run: gameship build example --name Catcher
+      - name: smoke-run frozen binary (headless)
+        shell: bash
+        env:
+          SDL_VIDEODRIVER: dummy
+          SDL_AUDIODRIVER: dummy
+          GAMESHIP_MAX_FRAMES: "120"
+        run: |
+          case "${{ matrix.channel }}" in
+            mac)     "example/dist/mac/Catcher.app/Contents/MacOS/Catcher" ;;
+            windows) "example/dist/windows/Catcher/Catcher.exe" ;;
+            linux)   "example/dist/linux/Catcher/Catcher" ;;
+          esac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: catcher-${{ matrix.channel }}
+          path: example/dist/

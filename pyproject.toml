@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gameship"
+version = "0.1.0"
+description = "Ship your Python game: one command to per-OS builds and itch.io"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["pygame", "packaging", "itch.io", "pyinstaller", "game"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Topic :: Games/Entertainment",
+  "Topic :: Software Development :: Build Tools",
+]
+
+[project.urls]
+Homepage = "https://github.com/Neuroforge/gameship"
+
+[project.scripts]
+gameship = "gameship:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
