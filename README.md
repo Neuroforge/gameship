@@ -6,7 +6,7 @@
   <a href="https://github.com/Neuroforge/gameship/actions/workflows/ci.yml"><img src="https://github.com/Neuroforge/gameship/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://pypi.org/project/gameship/"><img src="https://img.shields.io/pypi/v/gameship" alt="PyPI"></a>
   <img src="https://img.shields.io/pypi/pyversions/gameship" alt="Python versions">
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/license-FSL--1.1--MIT-blue.svg" alt="License: FSL-1.1-MIT">
 </p>
 
 **Ship your Python game.** One command from a pygame project to real
@@ -103,6 +103,11 @@ release publishes to your itch channels from CI.
 cross-compile Python — nobody can — so `gameship ci` writes the GitHub
 Actions matrix that builds natively on all three, free on public repos.
 
+**Is gameship open source?** Source-available under FSL-1.1-MIT: free for
+any use except reselling gameship itself as a service, and each release
+converts to plain MIT after two years. Games built with it are entirely
+unaffected — they're yours.
+
 **Can my pygame game run in the browser?** If it's pygame-ce with an async
 main loop: `gameship web` (pygbag), then upload the build as an itch.io HTML5
 game.
@@ -120,4 +125,15 @@ on Windows, macOS, and Linux **with gameship itself**.
 
 ## License
 
-MIT. Assets: none — the example uses shapes, and the logo is original.
+**[FSL-1.1-MIT](LICENSE)** (Functional Source License), which in plain words means:
+
+- **Your games are yours.** Build them, sell them, ship them anywhere —
+  commercial use of gameship *for making things* is unrestricted, and nothing
+  about the license touches your game or its builds.
+- **The one thing you can't do** is offer gameship itself as a competing
+  product or service (e.g. a hosted build-your-game SaaS) — that lane funds
+  the tool's maintenance.
+- **Every release automatically becomes plain MIT two years after its
+  publication.** No takebacks, it's in the license text.
+
+Assets: none — the example uses shapes, and the logo is original.

@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Ship your Python game: one command to per-OS builds and itch.io"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = { text = "FSL-1.1-MIT" }
 keywords = ["pygame", "packaging", "itch.io", "pyinstaller", "game"]
 classifiers = [
   "Development Status :: 3 - Alpha",
