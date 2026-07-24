@@ -1,0 +1,46 @@
+# The generated `gameship ci` workflow, dogfooding the PUBLISHED package:
+# installs gameship from PyPI (like any user), builds the example on all three
+# OSes, and pushes each channel to the live itch.io page. Only two adaptations
+# from the generator's output: working-directory (our game lives in example/)
+# and the artifact path.
+name: release-example
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: example
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,  channel: linux }
+          - { os: windows-latest, channel: windows }
+          - { os: macos-latest,   channel: mac }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: install game deps
+        shell: bash
+        run: |
+          pip install pyinstaller gameship
+          [ -f requirements.txt ] && pip install -r requirements.txt || pip install pygame-ce
+      - run: gameship build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: catcher-${{ matrix.channel }}
+          path: example/dist/
+      - name: publish to itch.io
+        if: ${{ env.KEY != '' && vars.ITCH_TARGET != '' }}
+        shell: bash
+        env:
+          KEY: ${{ secrets.BUTLER_API_KEY }}
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: gameship push "${{ vars.ITCH_TARGET }}" --channel "${{ matrix.channel }}"
