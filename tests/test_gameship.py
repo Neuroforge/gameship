@@ -87,3 +87,16 @@ def test_cli_smoke():
         capture_output=True, text=True, check=True,
     )
     assert out.stdout.strip() == gameship.__version__
+
+
+def test_push_butler_failure_dies_with_hint(tmp_path, monkeypatch, capsys):
+    (tmp_path / "dist").mkdir()
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("BUTLER_API_KEY", "x")
+    monkeypatch.setattr(gameship, "butler_bin", lambda: "/bin/butler")
+    def boom(cmd, check):
+        raise subprocess.CalledProcessError(1, cmd)
+    monkeypatch.setattr(gameship.subprocess, "run", boom)
+    with pytest.raises(SystemExit):
+        gameship.push(SimpleNamespace(target="user/game", path="dist", channel=None, userversion=None))
+    assert "itch.io/game/new" in capsys.readouterr().err

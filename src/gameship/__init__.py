@@ -20,7 +20,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 PLATFORM = {"darwin": "mac", "win32": "windows"}.get(sys.platform, "linux")
 BUTLER_URL = (
@@ -138,7 +138,15 @@ def push(args) -> None:
     if args.userversion:
         cmd += ["--userversion", args.userversion]
     print("gameship:", " ".join(cmd))
-    subprocess.run(cmd, check=True)
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        die(
+            f"butler push failed (exit {e.returncode}). If the error above says "
+            f"'invalid game': the itch.io project doesn't exist yet — create it at "
+            f"https://itch.io/game/new with the URL slug exactly "
+            f"'{args.target.split('/', 1)[1]}', save as draft, then re-run."
+        )
 
 
 def web(args) -> None:
