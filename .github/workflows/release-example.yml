@@ -30,7 +30,14 @@ jobs:
       - name: install game deps
         shell: bash
         run: |
-          pip install gameship
+          # tag-triggered runs install exactly the tagged gameship version;
+          # retry once for PyPI CDN propagation (raced 0.1.2/0.1.3 once)
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            V="${GITHUB_REF_NAME#v}"
+            pip install "gameship==$V" || { sleep 90; pip install "gameship==$V"; }
+          else
+            pip install gameship
+          fi
           [ -f requirements.txt ] && pip install -r requirements.txt || pip install pygame-ce
       - run: gameship build
       - uses: actions/upload-artifact@v4
