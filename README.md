@@ -1,4 +1,13 @@
-# gameship
+<p align="center">
+  <img src="docs/logo.png" alt="gameship" width="480">
+</p>
+
+<p align="center">
+  <a href="https://github.com/Neuroforge/gameship/actions/workflows/ci.yml"><img src="https://github.com/Neuroforge/gameship/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://pypi.org/project/gameship/"><img src="https://img.shields.io/pypi/v/gameship" alt="PyPI"></a>
+  <img src="https://img.shields.io/pypi/pyversions/gameship" alt="Python versions">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT">
+</p>
 
 **Ship your Python game.** One command from a pygame project to real
 Windows / macOS / Linux builds and an itch.io release — the workflow every
@@ -98,6 +107,17 @@ Actions matrix that builds natively on all three, free on public repos.
 main loop: `gameship web` (pygbag), then upload the build as an itch.io HTML5
 game.
 
+## Development
+
+```bash
+pip install -e . pytest
+pytest            # unit tests (pure logic, no PyInstaller needed)
+```
+
+The [CI](.github/workflows/ci.yml) dogfoods the tool: every push runs the
+tests on Python 3.11–3.13 and builds + headless-smoke-runs the example game
+on Windows, macOS, and Linux **with gameship itself**.
+
 ## License
 
-MIT. Assets: none — the example uses shapes.
+MIT. Assets: none — the example uses shapes, and the logo is original.

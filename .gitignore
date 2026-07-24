@@ -1,6 +1,8 @@
-.venv/
 dist/
 build/
-__pycache__/
-*.spec
 .gameship-work/
+__pycache__/
+*.egg-info/
+.DS_Store
+.venv/
+.pytest_cache/

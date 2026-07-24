@@ -1,5 +1,3 @@
-# Self-test: build the example game on all three OSes and smoke-run the
-# frozen binary headless. This is the same pipeline `gameship ci` gives users.
 name: ci
 on:
   push: { branches: [main] }
@@ -7,34 +5,44 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-example:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: { python-version: ["3.11", "3.12", "3.13"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python-version }}" }
+      - run: pip install -e . pytest
+      - run: pytest -q
+
+  # dogfood: build the example game on all three OSes with gameship itself,
+  # then smoke-run the frozen binary headless
+  example-build:
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest,  channel: linux }
-          - { os: windows-latest, channel: windows }
-          - { os: macos-latest,   channel: mac }
+          - { os: ubuntu-latest,  bin: "dist/linux/Catcher/Catcher" }
+          - { os: macos-latest,   bin: "dist/mac/Catcher/Catcher" }
+          - { os: windows-latest, bin: "dist/windows/Catcher/Catcher.exe" }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: pip install -e . pyinstaller pygame-ce
-      - run: gameship build example --name Catcher
-      - name: smoke-run frozen binary (headless)
+      - name: build the example with gameship
+        run: gameship build example --name Catcher
         shell: bash
+      - name: smoke-run the frozen binary (headless, 120 frames)
         env:
           SDL_VIDEODRIVER: dummy
           SDL_AUDIODRIVER: dummy
           GAMESHIP_MAX_FRAMES: "120"
-        run: |
-          case "${{ matrix.channel }}" in
-            mac)     "example/dist/mac/Catcher.app/Contents/MacOS/Catcher" ;;
-            windows) "example/dist/windows/Catcher/Catcher.exe" ;;
-            linux)   "example/dist/linux/Catcher/Catcher" ;;
-          esac
+        run: ./example/${{ matrix.bin }}
+        shell: bash
       - uses: actions/upload-artifact@v4
         with:
-          name: catcher-${{ matrix.channel }}
+          name: example-${{ matrix.os }}
           path: example/dist/
