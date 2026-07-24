@@ -86,6 +86,10 @@ whole feature set, none of its setup.
 builds it on all three OSes and smoke-runs the frozen binary headless
 (`SDL_VIDEODRIVER=dummy GAMESHIP_MAX_FRAMES=120`).
 
+**See it in the wild:** the same example, [live on itch.io](https://neuroforgepy.itch.io/catcher-gameship-demo)
+— built with `gameship build`, published with `gameship push`. The page is the
+pipeline's own output.
+
 ## Common questions this answers
 
 **How do I turn my pygame game into an .exe?** `gameship build` on a Windows
