@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install -e . pyinstaller pygame-ce
+      - run: pip install -e . pygame-ce
       - name: build the example with gameship
         run: gameship build example --name Catcher
         shell: bash
