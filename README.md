@@ -87,8 +87,10 @@ builds it on all three OSes and smoke-runs the frozen binary headless
 (`SDL_VIDEODRIVER=dummy GAMESHIP_MAX_FRAMES=120`).
 
 **See it in the wild:** the same example, [live on itch.io](https://neuroforgepy.itch.io/catcher-gameship-demo)
-— built with `gameship build`, published with `gameship push`. The page is the
-pipeline's own output.
+— built with `gameship build`, published with `gameship push` (all three OS
+channels via the [release workflow](.github/workflows/release-example.yml)).
+The page is the pipeline's own output. The example's main loop is async, so
+it's also `gameship web`-compatible — verified running in-browser via pygbag.
 
 ## Common questions this answers
 
