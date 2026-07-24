@@ -15,7 +15,7 @@ Python gamedev currently hand-rolls from PyInstaller + GitHub Actions + butler
 blog posts, packaged.
 
 ```bash
-pip install gameship pyinstaller
+pip install gameship
 
 gameship build                # freeze this OS's build   -> dist/<platform>/
 gameship push you/your-game   # publish to itch.io (butler auto-installed)
@@ -49,7 +49,7 @@ never think about it:
 
 ```bash
 cd your-game/          # has a main.py that runs your game
-pip install gameship pyinstaller
+pip install gameship
 gameship build
 open "dist/mac/YourGame.app"        # or dist/windows/, dist/linux/
 ```

@@ -20,7 +20,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 PLATFORM = {"darwin": "mac", "win32": "windows"}.get(sys.platform, "linux")
 BUTLER_URL = (
@@ -202,7 +202,7 @@ jobs:
       - name: install game deps
         shell: bash
         run: |
-          pip install pyinstaller gameship
+          pip install gameship
           [ -f requirements.txt ] && pip install -r requirements.txt || pip install pygame-ce
       - run: gameship build
       - uses: actions/upload-artifact@v4
