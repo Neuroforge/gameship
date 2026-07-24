@@ -20,7 +20,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 PLATFORM = {"darwin": "mac", "win32": "windows"}.get(sys.platform, "linux")
 BUTLER_URL = (
