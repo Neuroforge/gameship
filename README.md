@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.png" alt="gameship" width="480">
+  <img src="https://raw.githubusercontent.com/Neuroforge/gameship/main/docs/logo.png" alt="gameship" width="480">
 </p>
 
 <p align="center">
@@ -125,7 +125,7 @@ on Windows, macOS, and Linux **with gameship itself**.
 
 ## License
 
-**[FSL-1.1-MIT](LICENSE)** (Functional Source License), which in plain words means:
+**[FSL-1.1-MIT](https://github.com/Neuroforge/gameship/blob/main/LICENSE)** (Functional Source License), which in plain words means:
 
 - **Your games are yours.** Build them, sell them, ship them anywhere —
   commercial use of gameship *for making things* is unrestricted, and nothing
