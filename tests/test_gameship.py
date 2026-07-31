@@ -54,12 +54,15 @@ def test_build_command_construction(tmp_path, monkeypatch):
     (tmp_path / "assets").mkdir()
     seen = {}
     monkeypatch.setattr(gameship.subprocess, "run", lambda cmd, check: seen.setdefault("cmd", cmd))
-    args = SimpleNamespace(path=str(tmp_path), entry=None, name="MyGame", dist=None, onefile=True)
+    args = SimpleNamespace(path=str(tmp_path), entry=None, name="MyGame", dist=None, onefile=True,
+                           collect=["mylib"])
     gameship.build(args)
     cmd = seen["cmd"]
     assert "--windowed" in cmd and "--onefile" in cmd
     assert cmd[cmd.index("--name") + 1] == "MyGame"
     assert any(str(tmp_path / "assets") in c for c in cmd)  # --add-data wired
+    collected = [cmd[i + 1] for i, c in enumerate(cmd) if c == "--collect-all"]
+    assert "mylib" in collected  # --collect flag propagates
 
 
 def test_ci_writes_and_respects_force(tmp_path):
@@ -87,6 +90,14 @@ def test_cli_smoke():
         capture_output=True, text=True, check=True,
     )
     assert out.stdout.strip() == gameship.__version__
+
+
+def test_web_command_construction(tmp_path, monkeypatch):
+    (tmp_path / "main.py").touch()
+    seen = {}
+    monkeypatch.setattr(gameship.subprocess, "run", lambda cmd, check: seen.setdefault("cmd", cmd))
+    gameship.web(SimpleNamespace(path=str(tmp_path), entry=None))
+    assert "pygbag" in seen["cmd"] and "--build" in seen["cmd"]
 
 
 def test_push_butler_failure_dies_with_hint(tmp_path, monkeypatch, capsys):
