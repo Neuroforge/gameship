@@ -20,7 +20,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 PLATFORM = {"darwin": "mac", "win32": "windows"}.get(sys.platform, "linux")
 BUTLER_URL = (
@@ -85,10 +85,17 @@ def build(args) -> None:
         "--distpath", str(dist), "--workpath", str(work),
         "--specpath", str(work),
     ]
+    # engine recipes: packages that need full collection to survive freezing
+    import importlib.util
+    for pkg in ("pybevy", "arcade", "pygbag"):
+        if importlib.util.find_spec(pkg) is not None:
+            cmd += ["--collect-all", pkg]
+    for pkg in args.collect or []:
+        cmd += ["--collect-all", pkg]
     sep = ";" if PLATFORM == "windows" else ":"
     for adir in ("assets", "data", "resources"):
         if (root / adir).is_dir():
-            cmd += ["--add-data", f"{root / adir}{sep}{adir}"]
+            cmd += ["--add-data", f"{(root / adir).resolve()}{sep}{adir}"]
     if args.onefile:
         cmd.append("--onefile")
     cmd.append(str(entry))
@@ -241,6 +248,8 @@ def main() -> None:
     b.add_argument("--name", help="app name (default: pyproject name or folder)")
     b.add_argument("--dist", help="output dir (default: dist/<platform>)")
     b.add_argument("--onefile", action="store_true", help="single-file binary")
+    b.add_argument("--collect", action="append", metavar="PKG",
+                   help="pyinstaller --collect-all for PKG (repeatable)")
     b.set_defaults(fn=build)
 
     p = sub.add_parser("push", help="push a build to itch.io via butler")
